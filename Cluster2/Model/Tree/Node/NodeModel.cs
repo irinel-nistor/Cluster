@@ -9,15 +9,13 @@ namespace Cluster2.Model.Tree.Node
     class NodeModel
     {
         public NodeModel(){
-            Clusters = new LinkedList<int[]>();
+            Clusters = new List<int[]>();
         }
 
-        public LinkedListNode<int[]> currentToBeMerged { get; set; }
-        public LinkedListNode<int[]> toBeMergedWith { get; set; }
-
-        public LinkedListNode<int[]> Arrow { get; set; }
+        public int currentToBeMerged { get; set; }
+        public int toBeMergedWith { get; set; }
         
-        public LinkedList<int[]> Clusters;
+        public List<int[]> Clusters;
 
         public int Bullet { get; set; }
 
@@ -26,21 +24,21 @@ namespace Cluster2.Model.Tree.Node
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
-            var iterator = this.Clusters.First;
             var outerSeparator = "";
-            while (iterator != null)
+            foreach (var cluster in Clusters)
             {
                 strBuilder.Append(string.Format("{0}{1}", outerSeparator, "{"));
                 var innerSeparator = "";
-                foreach (var item in iterator.Value)
+                foreach (var item in cluster)
                 {
                     strBuilder.Append(string.Format("{0}{1}", innerSeparator, item));
                     innerSeparator = ",";
                 }
+
                 strBuilder.Append("}");
                 outerSeparator = ",";
-                iterator = iterator.Next;
             }
+
             strBuilder.Append(" => " + this.SumOfSquares);
             strBuilder.Append("\n");
             return strBuilder.ToString();
