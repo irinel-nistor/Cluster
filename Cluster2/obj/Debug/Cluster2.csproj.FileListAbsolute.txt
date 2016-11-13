@@ -1,0 +1,8 @@
+c:\users\irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\bin\Debug\Cluster2.exe.config
+c:\users\irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\bin\Debug\Cluster2.exe
+c:\users\irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\bin\Debug\Cluster2.pdb
+c:\users\irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\obj\Debug\Cluster2.exe
+c:\users\irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\obj\Debug\Cluster2.pdb
+C:\Users\Irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\bin\Debug\ClassLibrary2.dll
+C:\Users\Irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\bin\Debug\ClassLibrary2.xml
+C:\Users\Irinel\documents\visual studio 2013\Projects\Cluster2\Cluster2\obj\Debug\Cluster2.csprojResolveAssemblyReference.cache

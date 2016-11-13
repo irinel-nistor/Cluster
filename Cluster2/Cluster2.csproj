@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B5296B01-D2EC-499A-ACFC-657031D7839A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cluster2</RootNamespace>
+    <AssemblyName>Cluster2</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClassLibrary2">
+      <HintPath>..\packages\Elders.PowerCollections.1.0.0\lib\net45\ClassLibrary2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClusterWriter.cs" />
+    <Compile Include="Factory\PriortySearchFactory.cs" />
+    <Compile Include="Model\Search\PrioritySearch.cs" />
+    <Compile Include="Model\Tree\Node\NodeModel.cs" />
+    <Compile Include="Model\Tree\Node\NodeProcessor.cs" />
+    <Compile Include="Model\Tree\Prune\FakePrune.cs" />
+    <Compile Include="Model\Tree\Prune\IPrune.cs" />
+    <Compile Include="Model\Tree\Prune\Prune.cs" />
+    <Compile Include="Model\Tree\SumNodeComparer.cs" />
+    <Compile Include="Model\Visitor\AllClusterCountVisitor.cs" />
+    <Compile Include="Model\Visitor\ClusterCountVizitor.cs" />
+    <Compile Include="Model\Visitor\ClusterMinSumVIsitor.cs" />
+    <Compile Include="Model\Visitor\ClusterNumberVisitor.cs" />
+    <Compile Include="Model\Points\SumOfSquareCalculator.cs" />
+    <Compile Include="Model\Points\Point.cs" />
+    <Compile Include="Model\Points\Space.cs" />
+    <Compile Include="Model\Search\DfsSearch.cs" />
+    <Compile Include="Model\Search\BfsSearch.cs" />
+    <Compile Include="Model\Search\ISearchCollection.cs" />
+    <Compile Include="Model\Tree\MergedCluster.cs" />
+    <Compile Include="Model\Tree\Node\BaseNode.cs" />
+    <Compile Include="Model\Visitor\IVisitor.cs" />
+    <Compile Include="Model\Visitor\LogVisitor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Tree\Tree.cs" />
+    <Compile Include="TimeStamp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="bin\Debug\space2" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\Read\PS2\" />
+    <Folder Include="bin\Debug\Read\PS\" />
+    <Folder Include="bin\Debug\Write\PS\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

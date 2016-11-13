@@ -1,0 +1,16 @@
+Exception of type 'System.OutOfMemoryException' was thrown.
+T = 10, N = 15, Prune = false, PriorityQueue
+Exception of type 'System.OutOfMemoryException' was thrown.
+3094942
+00:01:47.9871864
+5364407
+00:03:37.9022405
+Exception of type 'System.OutOfMemoryException' was thrown.
+5269979
+00:03:29.6998561
+Exception of type 'System.OutOfMemoryException' was thrown.
+5376693
+00:03:30.1710736
+Exception of type 'System.OutOfMemoryException' was thrown.
+4195642
+00:02:36.4875520
