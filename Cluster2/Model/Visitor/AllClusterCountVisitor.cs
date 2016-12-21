@@ -9,14 +9,14 @@ namespace Cluster2.Model.Visitor
 {
     class AllClusterCountVisitor : IVisitor
     {
-        public Dictionary<int, NodeModel> minSumPerClusterCount;
+        public Dictionary<int, INodeModel> minSumPerClusterCount;
 
         public AllClusterCountVisitor()
         {
-            minSumPerClusterCount = new Dictionary<int, NodeModel>();
+            minSumPerClusterCount = new Dictionary<int, INodeModel>();
         }
 
-        public void Visit(NodeModel node)
+        public void Visit(INodeModel node)
         {
             var nodeClusterCount = node.Clusters.Count;
             if (minSumPerClusterCount.ContainsKey(nodeClusterCount))
@@ -38,7 +38,6 @@ namespace Cluster2.Model.Visitor
             foreach (var pair in this.minSumPerClusterCount)
             {
                 strBuilder.AppendFormat(" level {0} ----- {1}", pair.Key, pair.Value);
-                strBuilder.AppendLine();
             }
 
             return strBuilder.ToString();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cluster2.Cache;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,19 @@ using System.Threading.Tasks;
 
 namespace Cluster2.Model.Tree.Node
 {
-    class NodeModel
+    class NodeModel : INodeModel
     {
         public NodeModel(){
             Clusters = new List<int[]>();
+            Cache = new ClusterCache();
         }
 
-        public int currentToBeMerged { get; set; }
-        public int toBeMergedWith { get; set; }
+        public IClusterCache Cache { get; set; }
+
+        public int FirstClusterToBeMerged { get; set; }
+        public int SecondClusterToBeMerged { get; set; }
         
-        public List<int[]> Clusters;
+        public List<int[]> Clusters {get;set;}
 
         public int Bullet { get; set; }
 

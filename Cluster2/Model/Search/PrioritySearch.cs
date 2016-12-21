@@ -8,16 +8,16 @@ using Wintellect.PowerCollections;
 
 namespace Cluster2.Model.Search
 {
-    class PrioritySearch : ISearchCollection<NodeModel>
+    class PrioritySearch<NodeModelModel> : ISearchCollection<NodeModelModel>
     {
-        OrderedBag<NodeModel> priorityQueue;
+        OrderedBag<NodeModelModel> priorityQueue;
 
-        public PrioritySearch(IComparer<NodeModel> nodeSumComparer)
+        public PrioritySearch(IComparer<NodeModelModel> nodeSumComparer)
         {
-            priorityQueue = new OrderedBag<NodeModel>(nodeSumComparer);
+            priorityQueue = new OrderedBag<NodeModelModel>(nodeSumComparer);
         }
 
-        public void Push(NodeModel node)
+        public void Push(NodeModelModel node)
         {
             priorityQueue.Add(node);
         }
@@ -27,16 +27,14 @@ namespace Cluster2.Model.Search
             get { return priorityQueue.Count; }
         }
 
-        public NodeModel Peek()
+        public NodeModelModel Peek()
         {
             return priorityQueue.First();
         }
 
-        public NodeModel Pop()
+        public NodeModelModel Pop()
         {
-            var minNode = priorityQueue.First();
-            priorityQueue.Remove(minNode);
-            return minNode;
+            return priorityQueue.RemoveFirst();
         }
     }
 }

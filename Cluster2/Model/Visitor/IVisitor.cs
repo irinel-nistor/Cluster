@@ -9,6 +9,6 @@ namespace Cluster2.Model.Visitor
 {
     interface IVisitor
     {
-        void Visit(NodeModel node);
+        void Visit(INodeModel node);
     }
 }

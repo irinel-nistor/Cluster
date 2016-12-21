@@ -16,7 +16,7 @@ namespace Cluster2.Model.Visitor
             this.NrOfClusters = nr;
         }
 
-        public void Visit(NodeModel node)
+        public void Visit(INodeModel node)
         {
             if (node.Clusters.Count == this.NrOfClusters)
             {

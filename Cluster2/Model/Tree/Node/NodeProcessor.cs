@@ -7,103 +7,128 @@ using System.Threading.Tasks;
 
 namespace Cluster2.Model.Tree
 {
-    class NodeProcessor:BaseNode
+    class NodeProcessor : INodeProcessor<NodeModel>
     {
-        public NodeModel VidNode = new NodeModel();
-
+        public static NodeModel VidNode = new NodeModel();
+        private Points.SumOfSquareCalculator sumOfSquareCalculator;
         private IEnumerable<int> indexes;
-        
-        public NodeProcessor(IEnumerable<int> indexes, Points.SumOfSquareCalculator sumOfSquareCalculator):base(sumOfSquareCalculator)
+
+        public NodeProcessor(IEnumerable<int> indexes, Points.SumOfSquareCalculator sumOfSquareCalculator)
         {
             this.indexes = indexes;
+            this.sumOfSquareCalculator = sumOfSquareCalculator;
         }
 
         public NodeModel GenerateRoot()
         {
-            var rootNode = new NodeModel();
+            var rooNodeModel = new NodeModel();
             foreach (var index in indexes)
             {
-                rootNode.Clusters.AddLast(new[] { index });
+                rooNodeModel.Clusters.Add(new[] { index });
             }
-            rootNode.Arrow = rootNode.Clusters.First.Next;
-            rootNode.SumOfSquares = sumOfSquaresCalculator.CalculateSumOfSquares(rootNode);
-            return rootNode;
+
+            rooNodeModel.SumOfSquares = 0;
+            return rooNodeModel;
         }
 
         public NodeModel GenerateNextChild(NodeModel node)
         {
-            var childNode = new NodeModel();
-            if (!HasMoreChildren(node))
+            lock (node)
             {
-                return VidNode;
-            }
-
-            var iterator = node.Clusters.First;
-            while (iterator != null)
-            {
-                // merge step
-                if (node.currentToBeMerged.Equals(iterator))
+                var childNode = new NodeModel();
+                if (!HasMoreChildren(node))
                 {
-                    AddMergeNodeToChild(childNode, node);
+                    return VidNode;
                 }
-                // merged element should be ignored
-                else if (!node.toBeMergedWith.Equals(iterator))
+
+                this.InitSecondClusterToBeMerged(node);
+
+                foreach (var cluster in node.Clusters)
                 {
-                    childNode.Clusters.AddLast(iterator.Value); 
-                    if (node.toBeMergedWith.Equals(iterator.Previous))
+                    // merge step
+                    if (node.Clusters[node.FirstClusterToBeMerged].Equals(cluster))
                     {
-                        childNode.Arrow = childNode.Clusters.Last;
-                        childNode.Bullet = childNode.Clusters.Count - 2;
+                        var mergedCluster = AddMergedClusterToChild(childNode, node);
+
+                        this.CalculateSumFromParent(mergedCluster, node, childNode);
+                    }
+                    else if (!node.Clusters[node.SecondClusterToBeMerged].Equals(cluster))
+                    {
+                        childNode.Clusters.Add(cluster);
+                    }
+                    else
+                    {
+                        // merged element should be ignored
+                        childNode.Bullet = childNode.Clusters.Count - 1;
                     }
                 }
-                iterator = iterator.Next;
+
+                // increment p 
+                node.SecondClusterToBeMerged++;
+                if (node.Clusters.Count <= node.SecondClusterToBeMerged)
+                {
+                    node.FirstClusterToBeMerged++;
+                }
+
+                return childNode;
             }
-            // increment p 
-            node.toBeMergedWith = node.toBeMergedWith.Next;
-            if (node.toBeMergedWith == null)
-            {
-                node.currentToBeMerged = node.currentToBeMerged.Next;
-                node.Bullet++;
-            }
-            return childNode;
         }
 
-        private bool HasMoreChildren(NodeModel node)
+        public bool HasMoreChildren(NodeModel node)
         {
-            if (node.currentToBeMerged == null)
-            {
-                node.currentToBeMerged = node.Clusters.First;
-            }
-            if (node.Arrow == node.currentToBeMerged)
-            {
-                node.Arrow = node.Arrow.Next;
-            }
-            if (node.toBeMergedWith == null)
-            {
-                node.toBeMergedWith = node.Arrow;
-            }
-            if (node.Arrow == null || node.currentToBeMerged == null || node.currentToBeMerged == node.Clusters.Last)
+            if (node.Bullet >= node.Clusters.Count - 1 || node.FirstClusterToBeMerged >= node.Clusters.Count - 1)
             {
                 return false;
             }
+
             return true;
         }
 
-        private void AddMergeNodeToChild(NodeModel childNode, NodeModel parentNode)
+        private void CalculateSumFromParent(int[] mergedCluster, NodeModel parent, NodeModel childNode)
         {
-            var mergedValue = MergeNode(parentNode);
-            childNode.Clusters.AddLast(mergedValue);
-            var mergedCluster = new MergedCluster
+            var mergedClusterResidualSum = this.sumOfSquareCalculator.ResidualSumOfSquares(mergedCluster);
+            mergedClusterResidualSum += parent.SumOfSquares;
+
+            Func<int[], double> generator = this.sumOfSquareCalculator.ResidualSumOfSquares;
+            if (parent.Clusters.Count() - parent.Bullet > 3)
             {
-                MergedClusterComponents = new[] { parentNode.currentToBeMerged.Value, parentNode.toBeMergedWith.Value },
-                Value = mergedValue
-            };
-            childNode.SumOfSquares = this.sumOfSquaresCalculator.CalculateSumFromParent(mergedCluster, parentNode);
+                mergedClusterResidualSum -= parent.Cache.GetOrCache(parent.Clusters[parent.FirstClusterToBeMerged], generator);
+                mergedClusterResidualSum -= parent.Cache.GetOrCache(parent.Clusters[parent.SecondClusterToBeMerged], generator);
+            }
+            else
+            {
+                mergedClusterResidualSum -= generator(parent.Clusters[parent.FirstClusterToBeMerged]);
+                mergedClusterResidualSum -= generator(parent.Clusters[parent.SecondClusterToBeMerged]);
+            }
+
+            childNode.SumOfSquares = mergedClusterResidualSum;
         }
 
-        private int[] MergeNode(NodeModel node)
+        private int[] AddMergedClusterToChild(NodeModel childNode, NodeModel parenNodeModel)
         {
-            return node.currentToBeMerged.Value.Concat(node.toBeMergedWith.Value).ToArray();            
+            var mergedCluster = GetMergeCluster(parenNodeModel);
+            childNode.Clusters.Add(mergedCluster);
+
+            return mergedCluster;
+        }
+
+        private int[] GetMergeCluster(NodeModel node)
+        {
+            var firstToBeMergedCluster = node.Clusters[node.FirstClusterToBeMerged];
+            var secondToBeMergedCluster = node.Clusters[node.SecondClusterToBeMerged];
+            return firstToBeMergedCluster.Concat(secondToBeMergedCluster).ToArray();
+        }
+
+        private void InitSecondClusterToBeMerged(NodeModel node){
+            if(node.SecondClusterToBeMerged >= node.Clusters.Count || node.SecondClusterToBeMerged <= node.FirstClusterToBeMerged){
+                if(node.Bullet >= node.FirstClusterToBeMerged){
+                    node.SecondClusterToBeMerged = node.Bullet + 1;
+                }
+                else
+                {
+                    node.SecondClusterToBeMerged = node.FirstClusterToBeMerged + 1;
+                }
+            }
         }
     }
 }

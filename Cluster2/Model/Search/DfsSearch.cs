@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cluster2.Search
 {
-    class DfsSearch : ISearchCollection<NodeModel>
+    class DfsSearch<NodeModel> : ISearchCollection<NodeModel>
     {
         Stack<NodeModel> stack;
         public DfsSearch()

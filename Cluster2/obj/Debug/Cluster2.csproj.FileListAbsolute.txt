@@ -13,4 +13,6 @@ D:\GitHub\Cluster\Cluster2\bin\Debug\Cluster2.exe
 D:\GitHub\Cluster\Cluster2\bin\Debug\Cluster2.pdb
 D:\GitHub\Cluster\Cluster2\bin\Debug\ClassLibrary2.dll
 D:\GitHub\Cluster\Cluster2\bin\Debug\ClassLibrary2.xml
+D:\GitHub\Cluster\Cluster2\bin\Debug\Bytescout.Spreadsheet.dll
+D:\GitHub\Cluster\Cluster2\bin\Debug\Bytescout.Spreadsheet.xml
 D:\GitHub\Cluster\Cluster2\obj\Debug\Cluster2.csprojResolveAssemblyReference.cache

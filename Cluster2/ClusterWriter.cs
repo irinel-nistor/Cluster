@@ -32,7 +32,7 @@ namespace Cluster2
             {
                 for (int j = 0; j < m; j++ )
                 {
-                    var randomNumber = random.Next(101);
+                    var randomNumber = random.Next(100);
                     strBuilder.Append(randomNumber + " ");
                 }
                 strBuilder.AppendLine();
@@ -54,11 +54,11 @@ namespace Cluster2
             {
                 while (!string.IsNullOrWhiteSpace((line = file.ReadLine())))
                 {
-                    int coordinate;
+                    double coordinate;
                     var point = new Point();
-                    foreach (var elem in line.Split(' '))
+                    foreach (var elem in line.Split(new []{' ', '\t'}))
                     {
-                        if (int.TryParse(elem, out coordinate))
+                        if (double.TryParse(elem, out coordinate))
                         {
                             point.Coordinates.Add(coordinate);
                         }
@@ -68,6 +68,55 @@ namespace Cluster2
                 }
             }
             return coordinates;
+        }
+
+        public Dictionary<int, Point> CreateSortedMappingCoordinates()
+        {
+            int counter = 0;
+            string line;
+            var coordinates = new Dictionary<int, Point>();
+            var coordinateList = new List<Point>();
+
+            using (var file = new StreamReader(this.filePath))
+            {
+                while (!string.IsNullOrWhiteSpace((line = file.ReadLine())))
+                {
+                    double coordinate;
+                    var point = new Point();
+                    foreach (var elem in line.Split(new[] { ' ', '\t' }))
+                    {
+                        if (double.TryParse(elem, out coordinate))
+                        {
+                            point.Coordinates.Add(coordinate);
+                        }
+                    }
+                    coordinateList.Add(point);
+                }
+            }
+
+            var centerOfGravityPoint = this.CenterOfGravityPoint(coordinateList);
+            var orderedCoordinates = coordinateList.OrderBy(point => point.DistanceToPoint(centerOfGravityPoint));
+            foreach(var coordinate in orderedCoordinates){
+                coordinates.Add(counter, coordinate);
+                counter++;
+            }
+
+            return coordinates;
+        }
+
+        private Point CenterOfGravityPoint(List<Point> coordinateList){
+            Point centerOfGravityPoint = null;
+            var minAverage = double.MaxValue;
+
+            foreach(var point in coordinateList){
+                var averageDistanceToTheAllPoints = coordinateList.Average(otherPoint => otherPoint.DistanceToPoint(point));
+                if(minAverage > averageDistanceToTheAllPoints){
+                    minAverage = averageDistanceToTheAllPoints;
+                    centerOfGravityPoint = point;
+                }
+            }
+
+            return centerOfGravityPoint;
         }
     }
 }

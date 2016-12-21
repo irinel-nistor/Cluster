@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Cluster2.Factory
 {
-    class PrioritySearchFactory
+    class PrioritySearchFactory<NodeModel> where NodeModel : INodeModel
     {
         public ISearchCollection<NodeModel> create()
         {
-             return new PrioritySearch(new SumNodeComparer());
+            return new PrioritySearch<NodeModel>(new SumNodeComparer<NodeModel>());
         }
     }
 }

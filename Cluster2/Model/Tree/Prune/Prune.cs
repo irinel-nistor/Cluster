@@ -10,9 +10,11 @@ namespace Cluster2.Model.Tree.Prune
     class Prune: IPrune
     {
         private Dictionary<int, double> minSumPerClusterNumber;
+        private int initialNumberOfClusters;
 
         public Prune(int numberOfClusters)
         {
+            this.initialNumberOfClusters = numberOfClusters;
             minSumPerClusterNumber = new Dictionary<int, double>();
             for (var i = 0; i < numberOfClusters; i++ )
             {
@@ -20,7 +22,7 @@ namespace Cluster2.Model.Tree.Prune
             }
         }
 
-        public bool IsPrune(NodeModel node)
+        public bool IsPrune(INodeModel node)
         {
             var prune = false;
             if (node.SumOfSquares > minSumPerClusterNumber[node.Bullet])
@@ -28,10 +30,10 @@ namespace Cluster2.Model.Tree.Prune
                  prune = true;
             }
 
-            var numberOfClusertsOfCurentNode = node.Clusters.Count;
-            if (!prune && node.SumOfSquares < minSumPerClusterNumber[numberOfClusertsOfCurentNode - 1])
+            var numberOfClusertsOfCurenNodeModel = node.Clusters.Count - 1;
+            if (!prune && node.SumOfSquares < minSumPerClusterNumber[numberOfClusertsOfCurenNodeModel])
             {
-                minSumPerClusterNumber[numberOfClusertsOfCurentNode - 1] = node.SumOfSquares;
+                minSumPerClusterNumber[numberOfClusertsOfCurenNodeModel] = node.SumOfSquares;
             }
 
             return prune;

@@ -16,7 +16,7 @@ namespace Cluster2.Model.Visitor
             numberOfNodes = 0;
         }
 
-        public void Visit(NodeModel node)
+        public void Visit(INodeModel node)
         {
             numberOfNodes++;
         }

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Cluster2.Search
 {
-    class BfsSearch:ISearchCollection<NodeModel>
+    class BfsSearch<NodeModel> : ISearchCollection<NodeModel>
     {
         Queue<NodeModel> queue;
+
         public BfsSearch()
         {
             queue = new Queue<NodeModel>();

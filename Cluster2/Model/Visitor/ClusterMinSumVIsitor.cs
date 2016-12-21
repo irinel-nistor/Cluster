@@ -14,7 +14,7 @@ namespace Cluster2.Model.Visitor
             this.NumberOfClusters = m;
             this.MinSumOfSquares = int.MaxValue;
         }
-        public void Visit(NodeModel node)
+        public void Visit(INodeModel node)
         {
             if(node.Clusters.Count == this.NumberOfClusters && node.SumOfSquares < this.MinSumOfSquares){
                 this.MinSumOfSquares = node.SumOfSquares;
@@ -26,6 +26,6 @@ namespace Cluster2.Model.Visitor
 
         public double MinSumOfSquares { get; set; }
 
-        public NodeModel MinNode { get; set; }
+        public INodeModel MinNode { get; set; }
     }
 }

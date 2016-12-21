@@ -9,6 +9,6 @@ namespace Cluster2.Model.Tree.Prune
 {
     interface IPrune
     {
-        bool IsPrune(NodeModel node);
+        bool IsPrune(INodeModel node);
     }
 }

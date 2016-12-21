@@ -9,7 +9,7 @@ namespace Cluster2.Model.Tree.Prune
 {
     class FakePrune : IPrune
     {
-        public bool IsPrune(NodeModel node)
+        public bool IsPrune(INodeModel node)
         {
             return false;
         }
