@@ -33,45 +33,42 @@ namespace Cluster2.Model.Tree
 
         public NodeModel GenerateNextChild(NodeModel node)
         {
-            lock (node)
+            var childNode = new NodeModel();
+            if (!HasMoreChildren(node))
             {
-                var childNode = new NodeModel();
-                if (!HasMoreChildren(node))
-                {
-                    return VidNode;
-                }
-
-                this.InitSecondClusterToBeMerged(node);
-
-                foreach (var cluster in node.Clusters)
-                {
-                    // merge step
-                    if (node.Clusters[node.FirstClusterToBeMerged].Equals(cluster))
-                    {
-                        var mergedCluster = AddMergedClusterToChild(childNode, node);
-
-                        this.CalculateSumFromParent(mergedCluster, node, childNode);
-                    }
-                    else if (!node.Clusters[node.SecondClusterToBeMerged].Equals(cluster))
-                    {
-                        childNode.Clusters.Add(cluster);
-                    }
-                    else
-                    {
-                        // merged element should be ignored
-                        childNode.Bullet = childNode.Clusters.Count - 1;
-                    }
-                }
-
-                // increment p 
-                node.SecondClusterToBeMerged++;
-                if (node.Clusters.Count <= node.SecondClusterToBeMerged)
-                {
-                    node.FirstClusterToBeMerged++;
-                }
-
-                return childNode;
+                return VidNode;
             }
+
+            this.InitSecondClusterToBeMerged(node);
+
+            foreach (var cluster in node.Clusters)
+            {
+                // merge step
+                if (node.Clusters[node.FirstClusterToBeMerged].Equals(cluster))
+                {
+                    var mergedCluster = AddMergedClusterToChild(childNode, node);
+
+                    this.CalculateSumFromParent(mergedCluster, node, childNode);
+                }
+                else if (!node.Clusters[node.SecondClusterToBeMerged].Equals(cluster))
+                {
+                    childNode.Clusters.Add(cluster);
+                }
+                else
+                {
+                    // merged element should be ignored
+                    childNode.Bullet = childNode.Clusters.Count - 1;
+                }
+            }
+
+            // increment p 
+            node.SecondClusterToBeMerged++;
+            if (node.Clusters.Count <= node.SecondClusterToBeMerged)
+            {
+                node.FirstClusterToBeMerged++;
+            }
+
+            return childNode;
         }
 
         public bool HasMoreChildren(NodeModel node)

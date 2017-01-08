@@ -29,21 +29,21 @@ namespace Cluster2
             Directory.CreateDirectory("Write");
             var sum = 0;
             var elapsed = new TimeSpan();
-            var T = 1;
+            var T = 10;
             for (int i = 1; i <= T; i++)
             {
-                int n = 20, m = 1;
+                int n = 40, m = 1;
                 var clusterCountVizitor = new ClusterCountVizitor();
                 var allClusterVizitor = new AllClusterCountVisitor();
-                using (var spreadSheet = new XslWriter("Write/Ruspini.xls", T, n, "cached"))
+                using (var spreadSheet = new XslWriter("Write/optim6.xls", T, n, "multi thread mix no4"))
                 {
                     try
                     {
-                        var clusterWriter = new ClusterWriter("Read/Ruspini.txt");
-                       // clusterWriter.WriteCluster(n, m);
+                        var clusterWriter = new ClusterWriter(i ,"v2cluster40");
+                        clusterWriter.WriteCluster(n, m);
 
                         var coordinates = clusterWriter.CreateMappingCoordinates();
-                        var treeFactory = new TreeFactory(new DfsSearch<NodeModel>(), coordinates);
+                        var treeFactory = new TreeFactory(coordinates);
 
                         treeFactory.AttachVisitor(clusterCountVizitor);
                        // treeFactory.AttachVisitor(allClusterVizitor);
@@ -53,8 +53,9 @@ namespace Cluster2
                         var timeElapsed = new TimeStamp().GetTimeStamp(() => tree.Search());
 
                         spreadSheet.write("A" + i, int.Parse(clusterCountVizitor.ToString()));
-                        spreadSheet.write("B" + i, timeElapsed);
+                        spreadSheet.write("B" + i, timeElapsed.TotalSeconds);
                         spreadSheet.write("C" + i, treeFactory.ToString());
+                        spreadSheet.write("D" + i, timeElapsed);
                         //spreadSheet.write("D" + i, allClusterVizitor.ToString());
 
                         elapsed = elapsed.Add(timeElapsed);

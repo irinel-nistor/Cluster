@@ -17,17 +17,15 @@ namespace Cluster2
         private IPrune prune;
         private IList<IVisitor> visitors;
         private INodeProcessor<NodeModel> nodeProcessor;
-        private ThreadsPool threadPool;
-        private ClusterCache clusterCache;
+        private IThreadPool threadPool;
 
-        public Tree(ISearchCollection<NodeModel> searchMode, INodeProcessor<NodeModel> nodeProcessor, IPrune prune, ThreadsPool threadPool)
+        public Tree(ISearchCollection<NodeModel> searchMode, INodeProcessor<NodeModel> nodeProcessor, IPrune prune, IThreadPool threadPool)
         {
             this.searchCollection = searchMode;
             this.visitors = new List<IVisitor>();
             this.prune = prune;
             this.nodeProcessor = nodeProcessor;
             this.threadPool = threadPool;
-            this.clusterCache = clusterCache;
         }
 
         public void Search()
@@ -56,7 +54,7 @@ namespace Cluster2
                 else
                 {
                     if(masterThread){
-                        this.threadPool.TryNewThreadSearch(currenNodeModel);
+                        threadSearch(currenNodeModel);
                     }
                 }
             }
@@ -75,7 +73,6 @@ namespace Cluster2
         {
             if (!prune.IsPrune(node))
             {
-         
                 // Only push the node if it does have children
                 if (this.nodeProcessor.HasMoreChildren(node))
                 {
@@ -87,6 +84,34 @@ namespace Cluster2
                     visitor.Visit(node);
                 }
             }
+        }
+
+        private void threadSearch(NodeModel currentNodeModel){
+            while (this.threadPool.HasAvailableThreads() && this.nodeProcessor.HasMoreChildren(currentNodeModel))
+            {
+                var childNode = this.nodeProcessor.GenerateNextChild(currentNodeModel);
+                if (childNode != null && !childNode.Equals(NodeProcessor.VidNode))
+                {
+                    if (!prune.IsPrune(childNode))
+                    {
+                        // Only push the node if it does have children
+                        if (this.nodeProcessor.HasMoreChildren(childNode))
+                        {
+                            this.threadPool.TryNewThreadSearch(childNode);
+                        }
+
+                        foreach (var visitor in visitors)
+                        {
+                            visitor.Visit(childNode);
+                        }
+                    }    
+                }
+            }
+            
+            if (!this.nodeProcessor.HasMoreChildren(currentNodeModel))
+            {
+                searchCollection.Pop();
+            }        
         }
     }
 }

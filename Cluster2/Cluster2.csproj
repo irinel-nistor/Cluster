@@ -54,6 +54,7 @@
     <Compile Include="ClusterWriter.cs" />
     <Compile Include="Factory\PriortySearchFactory.cs" />
     <Compile Include="Factory\TreeFactory.cs" />
+    <Compile Include="Model\Search\ExtendedPrioritySearch.cs" />
     <Compile Include="Model\Search\PrioritySearch.cs" />
     <Compile Include="Model\Tree\ITree.cs" />
     <Compile Include="Model\Tree\Node\INodeModel.cs" />
@@ -66,8 +67,13 @@
     <Compile Include="Model\Tree\Prune\IPrune.cs" />
     <Compile Include="Model\Tree\Prune\Prune.cs" />
     <Compile Include="Model\Tree\SumNodeComparer.cs" />
-    <Compile Include="Model\Tree\ThreadsPool.cs" />
-    <Compile Include="Model\Tree\ThreadTree.cs" />
+    <Compile Include="Model\Tree\Thread\IThreadPool.cs" />
+    <Compile Include="Model\Tree\Thread\IThreadTree.cs" />
+    <Compile Include="Model\Tree\Thread\ThreadCount.cs" />
+    <Compile Include="Model\Tree\Thread\ThreadsPoolFrame.cs" />
+    <Compile Include="Model\Tree\Thread\ThreadsPool.cs" />
+    <Compile Include="Model\Tree\Thread\ThreadTree.cs" />
+    <Compile Include="Model\Tree\WideTree.cs" />
     <Compile Include="Model\Visitor\AllClusterCountVisitor.cs" />
     <Compile Include="Model\Visitor\ClusterCountVizitor.cs" />
     <Compile Include="Model\Visitor\ClusterMinSumVIsitor.cs" />

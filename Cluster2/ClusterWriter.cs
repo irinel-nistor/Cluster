@@ -95,7 +95,7 @@ namespace Cluster2
             }
 
             var centerOfGravityPoint = this.CenterOfGravityPoint(coordinateList);
-            var orderedCoordinates = coordinateList.OrderBy(point => point.DistanceToPoint(centerOfGravityPoint));
+            var orderedCoordinates = coordinateList.OrderByDescending(point => point.DistanceToPoint(centerOfGravityPoint));
             foreach(var coordinate in orderedCoordinates){
                 coordinates.Add(counter, coordinate);
                 counter++;

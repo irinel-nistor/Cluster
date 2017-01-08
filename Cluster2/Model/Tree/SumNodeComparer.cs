@@ -20,11 +20,13 @@ namespace Cluster2.Model.Tree
             if(x == null){
                 return -1;
             }
-            var comparisonResult = x.SumOfSquares.CompareTo(y.SumOfSquares);
+            var comparisonResult = x.Clusters.Count.CompareTo(y.Clusters.Count);
+
             if (comparisonResult == 0)
             {
-                comparisonResult = x.Clusters.Count.CompareTo(y.Clusters.Count);
+                comparisonResult = x.SumOfSquares.CompareTo(y.SumOfSquares);
             }
+
             return comparisonResult;
         }
     }
